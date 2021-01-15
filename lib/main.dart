@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         image: new Image.asset('assets/icon1.png'),
         backgroundColor: Colors.white,
         styleTextUnderTheLoader: new TextStyle(),
-        photoSize: 50.0,
+        photoSize: 30.0,
         useLoader: false,
       ),
     );

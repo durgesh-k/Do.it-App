@@ -141,60 +141,62 @@ class _MainTaskState extends State<MainTask> {
               ),
             ),
           ),
-          Expanded(
-              child: FutureBuilder(
-            initialData: [],
-            future: _dbhelper.getTasks(),
-            builder: (context, snapshot) {
-              last = snapshot.data.length;
+          Container(
+            child: SingleChildScrollView(
+                child: FutureBuilder(
+              initialData: [],
+              future: _dbhelper.getTasks(),
+              builder: (context, snapshot) {
+                last = snapshot.data.length;
 
-              return snapshot.data.length != 0
-                  ? (ListView.builder(
-                      itemCount: snapshot.data.length + 1,
-                      itemBuilder: (context, index) {
-                        return index < last
-                            ? TaskWidget(
-                                id: snapshot.data[index].id,
-                                title: snapshot.data[index].title,
-                                index: index,
-                                line: false,
-                                line2: false,
-                                itemlength: snapshot.data.length,
-                                day: snapshot.data[index].day,
-                                month: snapshot.data[index].month,
-                                year: snapshot.data[index].year,
-                                hour: snapshot.data[index].hour,
-                                minute: snapshot.data[index].minute,
-                                weekday: snapshot.data[index].weekday,
-                              )
-                            : Container(height: 40, width: 100);
-                      }))
-                  : Container(
-                      height: height / 4,
-                      child: Center(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                              height: 100,
-                              child: Image.asset('assets/Cat-sleep.png')),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "hssshh\nEverything done!",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontFamily: "Averta",
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: fColor),
-                          )
-                        ],
-                      )));
-            },
-          )),
+                return snapshot.data.length != 0
+                    ? (ListView.builder(
+                        itemCount: snapshot.data.length + 1,
+                        itemBuilder: (context, index) {
+                          return index < last
+                              ? TaskWidget(
+                                  id: snapshot.data[index].id,
+                                  title: snapshot.data[index].title,
+                                  index: index,
+                                  line: false,
+                                  line2: false,
+                                  itemlength: snapshot.data.length,
+                                  day: snapshot.data[index].day,
+                                  month: snapshot.data[index].month,
+                                  year: snapshot.data[index].year,
+                                  hour: snapshot.data[index].hour,
+                                  minute: snapshot.data[index].minute,
+                                  weekday: snapshot.data[index].weekday,
+                                )
+                              : Container(height: 40, width: 100);
+                        }))
+                    : Container(
+                        height: height / 4,
+                        child: Center(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                                height: 100,
+                                child: Image.asset('assets/Cat-sleep.png')),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "hssshh\nEverything done!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: "Averta",
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: fColor),
+                            )
+                          ],
+                        )));
+              },
+            )),
+          ),
         ],
       ),
     );
