@@ -107,13 +107,30 @@ class _MainTaskState extends State<MainTask> {
                   ),
                   Container(
                     child: Center(
-                        child: Text("$no \nTasks",
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FutureBuilder(
+                            initialData: "0",
+                            future: _dbhelper.getTasks(),
+                            builder: (context, snapshot) {
+                              return Text(snapshot.data.length.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontFamily: "Gotham",
+                                    fontSize: 23,
+                                    color: black,
+                                  ));
+                            }),
+                        Text("Tasks",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontFamily: "Gotham",
                               fontSize: 23,
                               color: black,
-                            ))),
+                            )),
+                      ],
+                    )),
                   ),
                   Container(
                     height: 80,
