@@ -222,8 +222,9 @@ class _TaskWidgetState extends State<TaskWidget> {
 
   @override
   void dispose() {
-    _editingController.dispose();
+    
     super.dispose();
+    _editingController.dispose();
     _controller.dispose();
   }
 
