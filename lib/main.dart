@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
-import 'package:tractiv/homepage.dart';
+import 'package:Do.it/homepage.dart';
 
 void main() {
   runApp(MyApp());

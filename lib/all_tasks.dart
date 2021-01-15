@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tractiv/database.dart';
-import 'package:tractiv/main_task.dart';
+import 'package:Do.it/database.dart';
+import 'package:Do.it/main_task.dart';
 
 class AllTasks extends StatefulWidget {
   @override

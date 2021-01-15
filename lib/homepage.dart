@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tractiv/taskpage.dart';
-import 'package:tractiv/all_tasks.dart';
+import 'package:Do.it/taskpage.dart';
+import 'package:Do.it/all_tasks.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 
 class HomePage extends StatefulWidget {

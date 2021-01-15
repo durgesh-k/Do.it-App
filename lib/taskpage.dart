@@ -1,16 +1,16 @@
 import 'dart:ui';
-import 'package:tractiv/main_task.dart';
-import 'package:tractiv/models/list.dart';
+import 'package:Do.it/main_task.dart';
+import 'package:Do.it/models/list.dart';
 import 'package:flutter/material.dart';
-import 'package:tractiv/menu.dart';
+import 'package:Do.it/menu.dart';
 //This is from menu file
 import 'dart:ui';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:tractiv/database.dart';
-import 'package:tractiv/models/task.dart';
-import 'package:tractiv/models/list.dart';
+import 'package:Do.it/database.dart';
+import 'package:Do.it/models/task.dart';
+import 'package:Do.it/models/list.dart';
 import 'package:circular_check_box/circular_check_box.dart';
 
 class TaskPage extends StatefulWidget {
@@ -61,6 +61,8 @@ class _TaskPageState extends State<TaskPage> {
     double _error = 0.0;
     double _error1 = 0.0;
     double _error2 = 0.0;
+    double height1 = 851;
+    double width1 = 393;
 
     DateHelper _dhelper = DateHelper();
     String week = _dhelper.getWeek(DateTime.now()).toString().toLowerCase();
@@ -74,7 +76,7 @@ class _TaskPageState extends State<TaskPage> {
             left: 0,
             bottom: (showBottomMenu)
                 ? (2)
-                : (-(height / 2) - 80 - 54 - 80 - 80 - 90),
+                : (-(height1 / 2) - 80 - 54 - 80 - 80 - 90),
             child: Padding(
               padding: const EdgeInsets.all(14.0),
               child: Column(
@@ -83,6 +85,8 @@ class _TaskPageState extends State<TaskPage> {
                     onTap: () {
                       this.setState(() {
                         showBottomMenu = true;
+                        print(height);
+                        print(width);
                       });
                     },
                     child: ClipRRect(
@@ -115,7 +119,7 @@ class _TaskPageState extends State<TaskPage> {
                           child: Container(
                             color: Colors.grey.shade200.withOpacity(0.5),
                             width: width - 28,
-                            height: height / 2 + 24 + 90 + 10,
+                            height: height1 / 2 + 24 + 90 + 10,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 2.0, horizontal: 20.0),
