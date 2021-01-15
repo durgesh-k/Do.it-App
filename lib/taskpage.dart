@@ -746,25 +746,8 @@ class _TaskPageState extends State<TaskPage> {
         Column(
           children: [
             Container(
-              height: 36,
+              height: 34,
               color: Colors.white,
-            ),
-            Container(
-              alignment: Alignment.topLeft,
-              height: 36,
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 14.0),
-                child: Text(
-                  'today',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontFamily: 'Gotham',
-                    fontSize: 36,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
             ),
           ],
         )

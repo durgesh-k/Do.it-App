@@ -22,10 +22,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: bgColor,
-      body: //Stack(children: <Widget>[
-          PageView(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: bgColor,
+        body: TaskPage() //Stack(children: <Widget>[
+        /*PageView(
         children: [TaskPage(), AllTasks()],
         onPageChanged: (index) {
           setState(() {
@@ -36,8 +36,8 @@ class _HomePageState extends State<HomePage> {
           });
         },
         controller: pageController,
-      ),
-      bottomNavigationBar: BottomNavyBar(
+      ),*/
+        /*bottomNavigationBar: BottomNavyBar(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           backgroundColor: bgColor,
           showElevation: false,
@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: fColor.withOpacity(1.0)))),
-          ]),
-    );
+          ]),*/
+        );
   }
 }

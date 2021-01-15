@@ -89,6 +89,33 @@ class DatabaseHelper {
     });
   }
 
+  Future<int> get() async {
+    Database _db = await database();
+    List<Map<String, dynamic>> taskMap1 = await _db.query('tasks');
+    return Future.value(taskMap1.length);
+  }
+
+  Future<List<Task>> getTasks1() async {
+    Database _db = await database();
+    DateTime now = DateTime.now();
+    List<Map<String, dynamic>> taskMap1 = await _db.query('tasks');
+    return List.generate(taskMap1.length, (index) {
+      if (int.parse(taskMap1[index]['year']) == now.year &&
+          int.parse(taskMap1[index]['month']) == now.month &&
+          int.parse(taskMap1[index]['day']) == now.day) {
+        return Task(
+            id: taskMap1[index]['id'],
+            title: taskMap1[index]['title'],
+            day: taskMap1[index]['day'],
+            month: taskMap1[index]['month'],
+            year: taskMap1[index]['year'],
+            weekday: taskMap1[index]['weekday'],
+            hour: taskMap1[index]['hour'],
+            minute: taskMap1[index]['minute']);
+      }
+    });
+  }
+
   Future<List<Todo>> getTodo(int taskId) async {
     Database _db = await database();
     List<Map<String, dynamic>> todoMap =

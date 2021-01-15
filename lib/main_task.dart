@@ -17,6 +17,11 @@ class MainTask extends StatefulWidget {
 class _MainTaskState extends State<MainTask> {
   final fColor = const Color(0x4285F4);
   DatabaseHelper _dbhelper = DatabaseHelper();
+  int no;
+  getInt() async {
+    final int no = await _dbhelper.get();
+    return no;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +31,15 @@ class _MainTaskState extends State<MainTask> {
     final black = const Color(0xFF171717);
     int last;
 
+    //int number = int.parse(no);
+    DateTime now = DateTime.now();
     DateHelper _dhelper = DateHelper();
     return Padding(
       padding: const EdgeInsets.all(14.0),
       child: Column(
         children: [
           SizedBox(
-            height: 60,
+            height: 30,
           ),
           ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(24.0)),
@@ -100,7 +107,7 @@ class _MainTaskState extends State<MainTask> {
                   ),
                   Container(
                     child: Center(
-                        child: Text("35 \nTasks",
+                        child: Text("$no \nTasks",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontFamily: "Gotham",
@@ -123,6 +130,7 @@ class _MainTaskState extends State<MainTask> {
             future: _dbhelper.getTasks(),
             builder: (context, snapshot) {
               last = snapshot.data.length;
+
               return snapshot.data.length != 0
                   ? (ListView.builder(
                       itemCount: snapshot.data.length + 1,
@@ -145,7 +153,7 @@ class _MainTaskState extends State<MainTask> {
                             : Container(height: 40, width: 100);
                       }))
                   : Container(
-                      height: height / 2,
+                      height: height / 4,
                       child: Center(
                           child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -158,7 +166,8 @@ class _MainTaskState extends State<MainTask> {
                             height: 10,
                           ),
                           Text(
-                            "Done for today!",
+                            "hssshh\nEverything done!",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontFamily: "Averta",
                                 fontSize: 18,
