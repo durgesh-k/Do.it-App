@@ -76,7 +76,7 @@ class _TaskPageState extends State<TaskPage> {
             left: 0,
             bottom: (showBottomMenu)
                 ? (2)
-                : (-(height1 / 2) - 80 - 54 - 80 - 80 - 90),
+                : (-(height1 / 2) - 80 - 54 - 80 - 80 - 90 - 80),
             child: Padding(
               padding: const EdgeInsets.all(14.0),
               child: Column(
@@ -108,7 +108,7 @@ class _TaskPageState extends State<TaskPage> {
                         )),
                   ),
                   SizedBox(
-                    height: 260,
+                    height: 340,
                   ),
                   StatefulBuilder(
                     builder: (BuildContext context, StateSetter setState) {
