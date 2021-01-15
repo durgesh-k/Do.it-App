@@ -37,45 +37,6 @@ class _HomePageState extends State<HomePage> {
         },
         controller: pageController,
       ),
-      /*Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              padding: EdgeInsets.only(left: 24, right: 24, bottom: 30),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    BottomBar(
-                        onPressed: () {
-                          setState(() {
-                            currentIndex = 0;
-                            pageController.animateToPage(currentIndex,
-                                duration: Duration(milliseconds: 100),
-                                curve: Curves.slowMiddle);
-                            bottomIcons = BottomIcons.Home;
-                          });
-                        },
-                        bottomIcons:
-                            bottomIcons == BottomIcons.Home ? true : false,
-                        icons: Icons.ac_unit_sharp,
-                        text: "Tasks"),
-                    BottomBar(
-                        onPressed: () {
-                          setState(() {
-                            currentIndex = 1;
-                            pageController.animateToPage(currentIndex,
-                                duration: Duration(milliseconds: 100),
-                                curve: Curves.slowMiddle);
-                            bottomIcons = BottomIcons.Favorite;
-                          });
-                        },
-                        bottomIcons: bottomIcons == BottomIcons.Favorite
-                            ? true
-                            : false,
-                        icons: Icons.home,
-                        text: "Profile"),
-                  ]),
-            ),
-          ),*/
       bottomNavigationBar: BottomNavyBar(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           backgroundColor: bgColor,
@@ -94,7 +55,7 @@ class _HomePageState extends State<HomePage> {
           items: [
             BottomNavyBarItem(
                 icon: Icon(
-                  Icons.access_alarm,
+                  Icons.today,
                   size: 15.0,
                   color: fColor.withOpacity(1.0),
                 ),
@@ -113,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                         color: fColor.withOpacity(1.0)))),
             BottomNavyBarItem(
                 icon: Icon(
-                  Icons.access_alarm,
+                  Icons.date_range,
                   size: 15.0,
                   color: fColor.withOpacity(1.0),
                 ),

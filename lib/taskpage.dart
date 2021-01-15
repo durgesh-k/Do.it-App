@@ -23,13 +23,13 @@ bool showBottomMenu = false;
 class _TaskPageState extends State<TaskPage> {
   //double height= MediaQuery.of(context).size.height;
   CalendarController _controller;
-  TextEditingController _editingController;
+  TextEditingController _texteditingController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _editingController = TextEditingController();
+    _texteditingController = TextEditingController();
     _controller = CalendarController();
   }
 
@@ -37,7 +37,7 @@ class _TaskPageState extends State<TaskPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _editingController.dispose();
+    _texteditingController.dispose();
     _controller.dispose();
   }
 
@@ -192,7 +192,7 @@ class _TaskPageState extends State<TaskPage> {
                                       color: fColor.withOpacity(0.05),
                                       child: Center(
                                         child: TextField(
-                                          controller: _editingController,
+                                          controller: _texteditingController,
                                           style: TextStyle(
                                               fontFamily: "Averta",
                                               fontWeight: FontWeight.bold,
@@ -258,6 +258,7 @@ class _TaskPageState extends State<TaskPage> {
                                       color: fColor.withOpacity(0.05),
                                       child: Center(
                                         child: TableCalendar(
+                                          initialSelectedDay: DateTime.now(),
                                           daysOfWeekStyle: DaysOfWeekStyle(
                                               weekdayStyle: TextStyle(
                                                   fontFamily: "Averta",
@@ -604,17 +605,19 @@ class _TaskPageState extends State<TaskPage> {
                                         splashColor:
                                             Colors.grey.withOpacity(0.4),
                                         onTap: () {
-                                          print(_editingController.text);
+                                          print(_texteditingController.text);
 
                                           DatabaseHelper _dbhelper =
                                               DatabaseHelper();
-                                          if (_editingController.text != "") {
+                                          if (_texteditingController.text !=
+                                              "") {
                                             if (daye != null) {
                                               if (radio) {
                                                 this.setState(() {
                                                   Task _newTask = Task(
-                                                      title: _editingController
-                                                          .text,
+                                                      title:
+                                                          _texteditingController
+                                                              .text,
                                                       year: year,
                                                       month: month,
                                                       day: daye,
@@ -624,13 +627,15 @@ class _TaskPageState extends State<TaskPage> {
                                                   _dbhelper
                                                       .insertTask(_newTask);
                                                   showBottomMenu = false;
-                                                  _editingController.text = "";
+                                                  _texteditingController.text =
+                                                      "";
                                                 });
                                               } else {
                                                 this.setState(() {
                                                   Task _newTask = Task(
-                                                      title: _editingController
-                                                          .text,
+                                                      title:
+                                                          _texteditingController
+                                                              .text,
                                                       year: year,
                                                       month: month,
                                                       day: daye,
@@ -640,15 +645,17 @@ class _TaskPageState extends State<TaskPage> {
                                                   _dbhelper
                                                       .insertTask(_newTask);
                                                   showBottomMenu = false;
-                                                  _editingController.text = "";
+                                                  _texteditingController.text =
+                                                      "";
                                                 });
                                               }
                                             } else {
                                               if (radio) {
                                                 this.setState(() {
                                                   Task _newTask = Task(
-                                                      title: _editingController
-                                                          .text,
+                                                      title:
+                                                          _texteditingController
+                                                              .text,
                                                       year: DateTime.now()
                                                           .toString()
                                                           .substring(0, 4),
@@ -664,13 +671,15 @@ class _TaskPageState extends State<TaskPage> {
                                                   _dbhelper
                                                       .insertTask(_newTask);
                                                   showBottomMenu = false;
-                                                  _editingController.text = "";
+                                                  _texteditingController.text =
+                                                      "";
                                                 });
                                               } else {
                                                 this.setState(() {
                                                   Task _newTask = Task(
-                                                      title: _editingController
-                                                          .text,
+                                                      title:
+                                                          _texteditingController
+                                                              .text,
                                                       year: DateTime.now()
                                                           .toString()
                                                           .substring(0, 4),
@@ -686,7 +695,8 @@ class _TaskPageState extends State<TaskPage> {
                                                   _dbhelper
                                                       .insertTask(_newTask);
                                                   showBottomMenu = false;
-                                                  _editingController.text = "";
+                                                  _texteditingController.text =
+                                                      "";
                                                 });
                                               }
                                             }

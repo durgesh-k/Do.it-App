@@ -211,7 +211,7 @@ class TaskWidget extends StatefulWidget {
 
 class _TaskWidgetState extends State<TaskWidget> {
   bool _isEditingText = false;
-  TextEditingController _editingController;
+  static TextEditingController _editingController;
   CalendarController _controller;
   @override
   void initState() {
@@ -222,9 +222,8 @@ class _TaskWidgetState extends State<TaskWidget> {
 
   @override
   void dispose() {
-    
+    //_editingController.dispose();
     super.dispose();
-    _editingController.dispose();
     _controller.dispose();
   }
 
@@ -251,318 +250,135 @@ class _TaskWidgetState extends State<TaskWidget> {
             curve: Curves.easeInOut,
             duration: Duration(milliseconds: 400),
             builder: (BuildContext context) {
-              return BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                child: Dialog(
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(28.0))),
-                    child: StatefulBuilder(
-                        builder: (BuildContext context, StateSetter setState) {
-                      return Container(
-                        width: width - 4,
-                        height: 520,
-                        child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  color: Colors.transparent,
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          width: 200,
-                                          child: TextField(
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                backgroundColor: Colors.transparent,
+                body: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(28.0)),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
+                          child: Positioned(
+                            bottom: 100,
+                            child: Container(
+                              color: Colors.white,
+                              width: width - 4,
+                              height: 530,
+                              child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        color: Colors.transparent,
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                width: 200,
+                                                child: TextField(
+                                                  style: TextStyle(
+                                                    fontFamily: "Averta",
+                                                    fontSize: 28,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: fColor,
+                                                  ),
+                                                  controller:
+                                                      _editingController,
+                                                  onChanged: (value) async {
+                                                    setState(() {
+                                                      if (value != "") {
+                                                        setState(() {
+                                                          _error1 = 0.0;
+                                                        });
+                                                        DatabaseHelper
+                                                            _dbhelper =
+                                                            DatabaseHelper();
+                                                        widget.title = value;
+                                                        _isEditingText = false;
+                                                        _dbhelper
+                                                            .updateTaskTitle(
+                                                                widget.id,
+                                                                widget.title);
+                                                      } else {
+                                                        setState(() {
+                                                          _error1 = 1.0;
+                                                        });
+                                                      }
+                                                    });
+                                                  },
+                                                  decoration: InputDecoration(
+                                                    border: InputBorder.none,
+                                                    //contentPadding: EdgeInsets.all(8),
+                                                  ),
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  this.setState(() {
+                                                    DatabaseHelper _dbhelper =
+                                                        DatabaseHelper();
+                                                    _dbhelper
+                                                        .deleteTask(widget.id);
+                                                    widget.line = true;
+                                                    Navigator.pop(context);
+                                                  });
+                                                },
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              14.0)),
+                                                  child: Container(
+                                                    height: 32,
+                                                    width: 32,
+                                                    color: Colors.grey.shade300
+                                                        .withOpacity(0.5),
+                                                    child: Center(
+                                                      child: Icon(
+                                                        Icons.delete_outline,
+                                                        color: Colors.white,
+                                                        size: 26,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      AnimatedOpacity(
+                                        duration: Duration(milliseconds: 120),
+                                        opacity: _error1,
+                                        child: Text(
+                                          "(Title should not be empty)",
+                                          style: TextStyle(
+                                              fontFamily: "Averta",
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 12,
+                                              color: Colors.red),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Date",
                                             style: TextStyle(
                                               fontFamily: "Averta",
-                                              fontSize: 28,
-                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
                                               color: fColor,
-                                            ),
-                                            controller: _editingController,
-                                            onChanged: (value) async {
-                                              setState(() {
-                                                if (value != "") {
-                                                  setState(() {
-                                                    _error1 = 0.0;
-                                                  });
-                                                  DatabaseHelper _dbhelper =
-                                                      DatabaseHelper();
-                                                  widget.title = value;
-                                                  _isEditingText = false;
-                                                  _dbhelper.updateTaskTitle(
-                                                      widget.id, widget.title);
-                                                } else {
-                                                  setState(() {
-                                                    _error1 = 1.0;
-                                                  });
-                                                }
-                                              });
-                                            },
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              //contentPadding: EdgeInsets.all(8),
-                                            ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            this.setState(() {
-                                              DatabaseHelper _dbhelper =
-                                                  DatabaseHelper();
-                                              _dbhelper.deleteTask(widget.id);
-                                              widget.line = true;
-                                              Navigator.pop(context);
-                                            });
-                                          },
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(14.0)),
-                                            child: Container(
-                                              height: 32,
-                                              width: 32,
-                                              color: Colors.grey.shade300
-                                                  .withOpacity(0.5),
-                                              child: Center(
-                                                child: Icon(
-                                                  Icons.delete_outline,
-                                                  color: Colors.white,
-                                                  size: 26,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                AnimatedOpacity(
-                                  duration: Duration(milliseconds: 120),
-                                  opacity: _error1,
-                                  child: Text(
-                                    "(Title should not be empty)",
-                                    style: TextStyle(
-                                        fontFamily: "Averta",
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 12,
-                                        color: Colors.red),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Date",
-                                      style: TextStyle(
-                                        fontFamily: "Averta",
-                                        fontSize: 14,
-                                        color: fColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    AnimatedOpacity(
-                                      duration: Duration(milliseconds: 120),
-                                      opacity: _error2,
-                                      child: Text(
-                                        "(Please enter a valid Date)",
-                                        style: TextStyle(
-                                            fontFamily: "Averta",
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 12,
-                                            color: Colors.red),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(24.0)),
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 10.0, sigmaY: 10.0),
-                                    child: Container(
-                                      color: fColor.withOpacity(0.1),
-                                      child: Center(
-                                        child: TableCalendar(
-                                          initialSelectedDay:
-                                              widget.hour != "null"
-                                                  ? DateTime(
-                                                      int.parse(widget.year),
-                                                      int.parse(widget.month),
-                                                      int.parse(widget.day),
-                                                      int.parse(widget.hour),
-                                                      int.parse(widget.minute))
-                                                  : DateTime(
-                                                      int.parse(widget.year),
-                                                      int.parse(widget.month),
-                                                      int.parse(widget.day),
-                                                      01,
-                                                      20),
-                                          daysOfWeekStyle: DaysOfWeekStyle(
-                                              weekdayStyle: TextStyle(
-                                                  fontFamily: "Averta",
-                                                  fontWeight: FontWeight.bold,
-                                                  color: fColor),
-                                              weekendStyle: TextStyle(
-                                                  fontFamily: "Averta",
-                                                  fontWeight: FontWeight.bold,
-                                                  color: yellow)),
-                                          calendarStyle: CalendarStyle(
-                                              contentDecoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(18))),
-                                              weekdayStyle: TextStyle(
-                                                  fontFamily: "Gotham",
-                                                  color: fColor),
-                                              selectedStyle: TextStyle(
-                                                  fontFamily: "Gotham",
-                                                  color: Colors.white),
-                                              selectedColor: fColor,
-                                              todayColor:
-                                                  fColor.withOpacity(0.3),
-                                              todayStyle: TextStyle(
-                                                  fontFamily: "Gotham",
-                                                  color: Colors.white),
-                                              weekendStyle: TextStyle(
-                                                fontFamily: "Gotham",
-                                                color: yellow,
-                                              )),
-                                          headerStyle: HeaderStyle(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(28))),
-                                              leftChevronIcon: Icon(
-                                                  Icons.chevron_left,
-                                                  color: fColor),
-                                              rightChevronIcon: Icon(
-                                                  Icons.chevron_right,
-                                                  color: fColor),
-                                              titleTextStyle: TextStyle(
-                                                  fontFamily: "Averta",
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: fColor),
-                                              centerHeaderTitle: true,
-                                              formatButtonVisible: false),
-                                          initialCalendarFormat:
-                                              CalendarFormat.week,
-                                          availableCalendarFormats: {
-                                            CalendarFormat.week: "Week"
-                                          },
-                                          calendarController: _controller,
-                                          onDaySelected:
-                                              (day, events, holidays) {
-                                            if (int.parse(day
-                                                        .toString()
-                                                        .substring(8, 10)) >=
-                                                    int.parse(DateTime.now()
-                                                        .toString()
-                                                        .substring(8, 10)) &&
-                                                int.parse(day.toString().substring(5, 7)) >=
-                                                    int.parse(DateTime.now()
-                                                        .toString()
-                                                        .substring(5, 7)) &&
-                                                int.parse(day.toString().substring(0, 4)) >=
-                                                    int.parse(DateTime.now()
-                                                        .toString()
-                                                        .substring(0, 4))) {
-                                              setState(() {
-                                                _error2 = 0.0;
-                                              });
-                                              DatabaseHelper _dbhelper =
-                                                  DatabaseHelper();
-                                              widget.year = day
-                                                  .toString()
-                                                  .substring(0, 4);
-                                              widget.month = day
-                                                  .toString()
-                                                  .substring(5, 7);
-                                              widget.day = day
-                                                  .toString()
-                                                  .substring(8, 10);
-                                              _dbhelper.updateday(
-                                                  widget.id, widget.day);
-                                              _dbhelper.updatemonth(
-                                                  widget.id, widget.month);
-                                              _dbhelper.updateyear(
-                                                  widget.id, widget.year);
-                                            } else {
-                                              setState(() {
-                                                _error2 = 1.0;
-                                              });
-                                            }
-                                            ;
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                StatefulBuilder(builder: (BuildContext context,
-                                    StateSetter setState) {
-                                  return Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Theme(
-                                            data: ThemeData(
-                                                unselectedWidgetColor:
-                                                    fColor.withOpacity(0.3)),
-                                            child: CircularCheckBox(
-                                                value: radio,
-                                                disabledColor:
-                                                    Colors.grey.shade200,
-                                                activeColor: fColor,
-                                                onChanged: (bool value) {
-                                                  setState(() {
-                                                    radio = value;
-                                                    _opacity = _opacity == 0.3
-                                                        ? 1.0
-                                                        : 0.3;
-                                                  });
-                                                }),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                radio = !radio;
-                                                _opacity =
-                                                    _opacity == 0.3 ? 1.0 : 0.3;
-                                              });
-                                            },
-                                            child: AnimatedOpacity(
-                                              duration:
-                                                  Duration(milliseconds: 120),
-                                              opacity: _opacity,
-                                              child: Text(
-                                                "Time",
-                                                style: TextStyle(
-                                                  fontFamily: "Averta",
-                                                  fontSize: 14,
-                                                  color: fColor,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                           SizedBox(
@@ -571,295 +387,550 @@ class _TaskWidgetState extends State<TaskWidget> {
                                           AnimatedOpacity(
                                             duration:
                                                 Duration(milliseconds: 120),
-                                            opacity: _error3,
+                                            opacity: _error2,
                                             child: Text(
-                                              "(Swipe Up/Down to change time)",
+                                              "(Please enter a valid Date)",
                                               style: TextStyle(
                                                   fontFamily: "Averta",
                                                   fontWeight: FontWeight.normal,
                                                   fontSize: 12,
-                                                  color: Colors.grey),
+                                                  color: Colors.red),
                                             ),
                                           ),
                                         ],
                                       ),
-                                      AnimatedOpacity(
-                                        duration: Duration(milliseconds: 120),
-                                        opacity: _opacity,
-                                        child: InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              if (radio) {
-                                                _error3 =
-                                                    _error3 == 0.0 ? 1.0 : 0.0;
-                                              } else {
-                                                radio = true;
-                                                _opacity =
-                                                    _opacity == 0.3 ? 1.0 : 0.3;
-                                              }
-                                            });
-                                          },
-                                          child: Row(
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(36),
-                                                    bottomLeft:
-                                                        Radius.circular(36)),
-                                                child: Container(
-                                                  height: 120,
-                                                  width: 100,
-                                                  color:
-                                                      fColor.withOpacity(0.08),
-                                                  child: Center(
-                                                    child: ListWheelScrollView
-                                                        .useDelegate(
-                                                      itemExtent: 120,
-                                                      squeeze: 0.2,
-                                                      physics:
-                                                          FixedExtentScrollPhysics(),
-                                                      diameterRatio: 10,
-                                                      magnification: 1.5,
-                                                      onSelectedItemChanged:
-                                                          (value) {
-                                                        widget.hour =
-                                                            hours[value];
-                                                      },
-                                                      childDelegate:
-                                                          ListWheelChildBuilderDelegate(
-                                                              builder: (context,
-                                                                  index) {
-                                                        if (index < 0 ||
-                                                            index >
-                                                                (hours.length -
-                                                                    1)) {
-                                                          return null;
-                                                        }
-                                                        return Container(
-                                                            child: Center(
-                                                                child: Text(
-                                                          hours[index],
-                                                          style: TextStyle(
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(24.0)),
+                                        child: BackdropFilter(
+                                          filter: ImageFilter.blur(
+                                              sigmaX: 10.0, sigmaY: 10.0),
+                                          child: Container(
+                                            color: fColor.withOpacity(0.1),
+                                            child: Center(
+                                              child: TableCalendar(
+                                                initialSelectedDay: widget
+                                                            .hour !=
+                                                        "null"
+                                                    ? DateTime(
+                                                        int.parse(widget.year),
+                                                        int.parse(widget.month),
+                                                        int.parse(widget.day),
+                                                        int.parse(widget.hour),
+                                                        int.parse(
+                                                            widget.minute))
+                                                    : DateTime(
+                                                        int.parse(widget.year),
+                                                        int.parse(widget.month),
+                                                        int.parse(widget.day),
+                                                        01,
+                                                        20),
+                                                daysOfWeekStyle:
+                                                    DaysOfWeekStyle(
+                                                        weekdayStyle: TextStyle(
                                                             fontFamily:
-                                                                "Gotham",
-                                                            fontSize: 48,
-                                                            color: fColor,
-                                                          ),
-                                                        )));
+                                                                "Averta",
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: fColor),
+                                                        weekendStyle:
+                                                            TextStyle(
+                                                                fontFamily:
+                                                                    "Averta",
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: yellow)),
+                                                calendarStyle: CalendarStyle(
+                                                    contentDecoration:
+                                                        BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            18))),
+                                                    weekdayStyle: TextStyle(
+                                                        fontFamily: "Gotham",
+                                                        color: fColor),
+                                                    selectedStyle: TextStyle(
+                                                        fontFamily: "Gotham",
+                                                        color: Colors.white),
+                                                    selectedColor: fColor,
+                                                    todayColor:
+                                                        fColor.withOpacity(0.3),
+                                                    todayStyle: TextStyle(
+                                                        fontFamily: "Gotham",
+                                                        color: Colors.white),
+                                                    weekendStyle: TextStyle(
+                                                      fontFamily: "Gotham",
+                                                      color: yellow,
+                                                    )),
+                                                headerStyle: HeaderStyle(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    28))),
+                                                    leftChevronIcon: Icon(
+                                                        Icons.chevron_left,
+                                                        color: fColor),
+                                                    rightChevronIcon: Icon(
+                                                        Icons.chevron_right,
+                                                        color: fColor),
+                                                    titleTextStyle: TextStyle(
+                                                        fontFamily: "Averta",
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: fColor),
+                                                    centerHeaderTitle: true,
+                                                    formatButtonVisible: false),
+                                                initialCalendarFormat:
+                                                    CalendarFormat.week,
+                                                availableCalendarFormats: {
+                                                  CalendarFormat.week: "Week"
+                                                },
+                                                calendarController: _controller,
+                                                onDaySelected:
+                                                    (day, events, holidays) {
+                                                  if (int.parse(day.toString().substring(8, 10)) >=
+                                                          int.parse(DateTime.now()
+                                                              .toString()
+                                                              .substring(
+                                                                  8, 10)) &&
+                                                      int.parse(day.toString().substring(5, 7)) >=
+                                                          int.parse(DateTime.now()
+                                                              .toString()
+                                                              .substring(
+                                                                  5, 7)) &&
+                                                      int.parse(day.toString().substring(0, 4)) >=
+                                                          int.parse(
+                                                              DateTime.now()
+                                                                  .toString()
+                                                                  .substring(
+                                                                      0, 4))) {
+                                                    setState(() {
+                                                      _error2 = 0.0;
+                                                    });
+                                                    DatabaseHelper _dbhelper =
+                                                        DatabaseHelper();
+                                                    widget.year = day
+                                                        .toString()
+                                                        .substring(0, 4);
+                                                    widget.month = day
+                                                        .toString()
+                                                        .substring(5, 7);
+                                                    widget.day = day
+                                                        .toString()
+                                                        .substring(8, 10);
+                                                    _dbhelper.updateday(
+                                                        widget.id, widget.day);
+                                                    _dbhelper.updatemonth(
+                                                        widget.id,
+                                                        widget.month);
+                                                    _dbhelper.updateyear(
+                                                        widget.id, widget.year);
+                                                  } else {
+                                                    setState(() {
+                                                      _error2 = 1.0;
+                                                    });
+                                                  }
+                                                  ;
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      StatefulBuilder(builder:
+                                          (BuildContext context,
+                                              StateSetter setState) {
+                                        return Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Theme(
+                                                  data: ThemeData(
+                                                      unselectedWidgetColor:
+                                                          fColor.withOpacity(
+                                                              0.3)),
+                                                  child: CircularCheckBox(
+                                                      value: radio,
+                                                      disabledColor:
+                                                          Colors.grey.shade200,
+                                                      activeColor: fColor,
+                                                      onChanged: (bool value) {
+                                                        setState(() {
+                                                          radio = value;
+                                                          _opacity =
+                                                              _opacity == 0.3
+                                                                  ? 1.0
+                                                                  : 0.3;
+                                                        });
                                                       }),
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      radio = !radio;
+                                                      _opacity = _opacity == 0.3
+                                                          ? 1.0
+                                                          : 0.3;
+                                                    });
+                                                  },
+                                                  child: AnimatedOpacity(
+                                                    duration: Duration(
+                                                        milliseconds: 120),
+                                                    opacity: _opacity,
+                                                    child: Text(
+                                                      "Time",
+                                                      style: TextStyle(
+                                                        fontFamily: "Averta",
+                                                        fontSize: 14,
+                                                        color: fColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                AnimatedOpacity(
+                                                  duration: Duration(
+                                                      milliseconds: 120),
+                                                  opacity: _error3,
+                                                  child: Text(
+                                                    "(Swipe Up/Down to change time)",
+                                                    style: TextStyle(
+                                                        fontFamily: "Averta",
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 12,
+                                                        color: Colors.grey),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            AnimatedOpacity(
+                                              duration:
+                                                  Duration(milliseconds: 120),
+                                              opacity: _opacity,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    if (radio) {
+                                                      _error3 = _error3 == 0.0
+                                                          ? 1.0
+                                                          : 0.0;
+                                                    } else {
+                                                      radio = true;
+                                                      _opacity = _opacity == 0.3
+                                                          ? 1.0
+                                                          : 0.3;
+                                                    }
+                                                  });
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(36),
+                                                              bottomLeft: Radius
+                                                                  .circular(
+                                                                      36)),
+                                                      child: Container(
+                                                        height: 120,
+                                                        width: 100,
+                                                        color: fColor
+                                                            .withOpacity(0.08),
+                                                        child: Center(
+                                                          child:
+                                                              ListWheelScrollView
+                                                                  .useDelegate(
+                                                            itemExtent: 120,
+                                                            squeeze: 0.2,
+                                                            physics:
+                                                                FixedExtentScrollPhysics(),
+                                                            diameterRatio: 10,
+                                                            magnification: 1.5,
+                                                            onSelectedItemChanged:
+                                                                (value) {
+                                                              widget.hour =
+                                                                  hours[value];
+                                                            },
+                                                            childDelegate:
+                                                                ListWheelChildBuilderDelegate(
+                                                                    builder:
+                                                                        (context,
+                                                                            index) {
+                                                              if (index < 0 ||
+                                                                  index >
+                                                                      (hours.length -
+                                                                          1)) {
+                                                                return null;
+                                                              }
+                                                              return Container(
+                                                                  child: Center(
+                                                                      child:
+                                                                          Text(
+                                                                hours[index],
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      "Gotham",
+                                                                  fontSize: 48,
+                                                                  color: fColor,
+                                                                ),
+                                                              )));
+                                                            }),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      height: 120,
+                                                      color: fColor
+                                                          .withOpacity(0.08),
+                                                      child: Center(
+                                                        child: Text(
+                                                          ":",
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                "Averta",
+                                                            fontSize: 48,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: fColor,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ), //first
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topRight: Radius
+                                                                  .circular(36),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          36)),
+                                                      child: Container(
+                                                        height: 120,
+                                                        width: 100,
+                                                        color: fColor
+                                                            .withOpacity(0.08),
+                                                        child: Center(
+                                                          child:
+                                                              ListWheelScrollView
+                                                                  .useDelegate(
+                                                            itemExtent: 120,
+                                                            squeeze: 0.2,
+                                                            physics:
+                                                                FixedExtentScrollPhysics(),
+                                                            diameterRatio: 4,
+                                                            magnification: 1.5,
+                                                            onSelectedItemChanged:
+                                                                (value) {
+                                                              widget.minute =
+                                                                  mins[value];
+                                                            },
+                                                            childDelegate:
+                                                                ListWheelChildBuilderDelegate(
+                                                                    builder:
+                                                                        (context,
+                                                                            index) {
+                                                              if (index < 0 ||
+                                                                  index >
+                                                                      (mins.length -
+                                                                          1)) {
+                                                                return null;
+                                                              }
+                                                              return Container(
+                                                                  child: Center(
+                                                                      child:
+                                                                          Text(
+                                                                mins[index],
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      "Gotham",
+                                                                  fontSize: 48,
+                                                                  color: fColor,
+                                                                ),
+                                                              )));
+                                                            }),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ), //second
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  14.0)),
+                                                      child: Container(
+                                                        height: 120,
+                                                        width: 70,
+                                                        color: Colors
+                                                            .grey.shade800
+                                                            .withOpacity(0),
+                                                        child: Center(
+                                                          child:
+                                                              ListWheelScrollView
+                                                                  .useDelegate(
+                                                            itemExtent: 40,
+                                                            squeeze: 0.2,
+                                                            physics:
+                                                                FixedExtentScrollPhysics(),
+                                                            diameterRatio: 100,
+                                                            magnification: 1.5,
+                                                            onSelectedItemChanged:
+                                                                (value) {
+                                                              widget.weekday =
+                                                                  type[value];
+                                                            },
+                                                            childDelegate:
+                                                                ListWheelChildBuilderDelegate(
+                                                                    builder:
+                                                                        (context,
+                                                                            index) {
+                                                              if (index < 0 ||
+                                                                  index >
+                                                                      (type.length -
+                                                                          1)) {
+                                                                return null;
+                                                              }
+                                                              return Container(
+                                                                  child: Center(
+                                                                      child:
+                                                                          Text(
+                                                                type[index],
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      "Gotham",
+                                                                  fontSize: 28,
+                                                                  color: fColor,
+                                                                ),
+                                                              )));
+                                                            }),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ), //This is the third one
+                                                  ],
+                                                ),
                                               ),
-                                              Container(
-                                                height: 120,
-                                                color: fColor.withOpacity(0.08),
+                                            ),
+                                          ],
+                                        );
+                                      }),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                              height: 60,
+                                              child: Image.asset(
+                                                  'assets/Big-pencil.png')),
+                                          SizedBox(width: 10),
+                                          InkWell(
+                                            onTap: () {
+                                              this.setState(() {
+                                                DatabaseHelper _dbhelper =
+                                                    DatabaseHelper();
+                                                _dbhelper.deleteTask(widget.id);
+                                                widget.line2 = true;
+                                                Navigator.pop(context);
+                                              });
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(14.0)),
+                                              child: Container(
+                                                color: Colors.green,
+                                                height: 36,
+                                                width: 100,
                                                 child: Center(
                                                   child: Text(
-                                                    ":",
+                                                    "Mark as Done",
                                                     style: TextStyle(
                                                       fontFamily: "Averta",
-                                                      fontSize: 48,
+                                                      fontSize: 12,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      color: fColor,
+                                                      color: Colors.white,
                                                     ),
                                                   ),
                                                 ),
-                                              ), //first
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.only(
-                                                    topRight:
-                                                        Radius.circular(36),
-                                                    bottomRight:
-                                                        Radius.circular(36)),
-                                                child: Container(
-                                                  height: 120,
-                                                  width: 100,
-                                                  color:
-                                                      fColor.withOpacity(0.08),
-                                                  child: Center(
-                                                    child: ListWheelScrollView
-                                                        .useDelegate(
-                                                      itemExtent: 120,
-                                                      squeeze: 0.2,
-                                                      physics:
-                                                          FixedExtentScrollPhysics(),
-                                                      diameterRatio: 4,
-                                                      magnification: 1.5,
-                                                      onSelectedItemChanged:
-                                                          (value) {
-                                                        widget.minute =
-                                                            mins[value];
-                                                      },
-                                                      childDelegate:
-                                                          ListWheelChildBuilderDelegate(
-                                                              builder: (context,
-                                                                  index) {
-                                                        if (index < 0 ||
-                                                            index >
-                                                                (mins.length -
-                                                                    1)) {
-                                                          return null;
-                                                        }
-                                                        return Container(
-                                                            child: Center(
-                                                                child: Text(
-                                                          mins[index],
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                "Gotham",
-                                                            fontSize: 48,
-                                                            color: fColor,
-                                                          ),
-                                                        )));
-                                                      }),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ), //second
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(14.0)),
-                                                child: Container(
-                                                  height: 120,
-                                                  width: 70,
-                                                  color: Colors.grey.shade800
-                                                      .withOpacity(0),
-                                                  child: Center(
-                                                    child: ListWheelScrollView
-                                                        .useDelegate(
-                                                      itemExtent: 40,
-                                                      squeeze: 0.2,
-                                                      physics:
-                                                          FixedExtentScrollPhysics(),
-                                                      diameterRatio: 100,
-                                                      magnification: 1.5,
-                                                      onSelectedItemChanged:
-                                                          (value) {
-                                                        widget.weekday =
-                                                            type[value];
-                                                      },
-                                                      childDelegate:
-                                                          ListWheelChildBuilderDelegate(
-                                                              builder: (context,
-                                                                  index) {
-                                                        if (index < 0 ||
-                                                            index >
-                                                                (type.length -
-                                                                    1)) {
-                                                          return null;
-                                                        }
-                                                        return Container(
-                                                            child: Center(
-                                                                child: Text(
-                                                          type[index],
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                "Gotham",
-                                                            fontSize: 28,
-                                                            color: fColor,
-                                                          ),
-                                                        )));
-                                                      }),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ), //This is the third one
-                                            ],
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                          InkWell(
+                                            onTap: () {
+                                              this.setState(() {
+                                                Navigator.pop(context);
+                                              });
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(14.0)),
+                                              child: Container(
+                                                color: fColor,
+                                                height: 36,
+                                                width: 100,
+                                                child: Center(
+                                                  child: Text(
+                                                    "Done",
+                                                    style: TextStyle(
+                                                      fontFamily: "Averta",
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        "(Tap on items to edit)",
+                                        style: TextStyle(
+                                            fontFamily: "Averta",
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 12,
+                                            color: Colors.grey),
                                       ),
                                     ],
-                                  );
-                                }),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                        height: 60,
-                                        child: Image.asset(
-                                            'assets/Big-pencil.png')),
-                                    InkWell(
-                                      onTap: () {
-                                        this.setState(() {
-                                          DatabaseHelper _dbhelper =
-                                              DatabaseHelper();
-                                          _dbhelper.deleteTask(widget.id);
-                                          widget.line2 = true;
-                                          Navigator.pop(context);
-                                        });
-                                      },
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(14.0)),
-                                        child: Container(
-                                          color: Colors.green,
-                                          height: 36,
-                                          width: 100,
-                                          child: Center(
-                                            child: Text(
-                                              "Mark as Done",
-                                              style: TextStyle(
-                                                fontFamily: "Averta",
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        this.setState(() {
-                                          Navigator.pop(context);
-                                        });
-                                      },
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(14.0)),
-                                        child: Container(
-                                          color: fColor,
-                                          height: 36,
-                                          width: 100,
-                                          child: Center(
-                                            child: Text(
-                                              "Done",
-                                              style: TextStyle(
-                                                fontFamily: "Averta",
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  "(Tap on items to edit)",
-                                  style: TextStyle(
-                                      fontFamily: "Averta",
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 12,
-                                      color: Colors.grey),
-                                ),
-                              ],
-                            )),
-                      );
-                    })),
+                                  )),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
               );
             }),
         child: !widget.line
@@ -1046,7 +1117,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                             child: Text(widget.day,
                                 style: TextStyle(
                                   fontFamily: "Gotham",
-                                  fontSize: 34,
+                                  fontSize: 28,
                                   color: Colors.grey.shade300,
                                 )),
                           ),
@@ -1058,7 +1129,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                                     .toUpperCase(),
                                 style: TextStyle(
                                   fontFamily: "Gotham",
-                                  fontSize: 20,
+                                  fontSize: 16,
                                   color: Colors.grey.shade300,
                                 )),
                           ),
